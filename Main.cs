@@ -12,7 +12,8 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             "declare",
             "assign",
             "to",
-            "print"
+            "print",
+            "repeat"
         };
         public static List<string> variables = new List<string>();
         public static List<string> variableValues = new List<string>();
@@ -26,7 +27,14 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static string tempString;
         public static string[] segments;
         public static void Interpret(string input)
-        {
+        {   
+            tempString = input.Split(' ')[1]; // checking first word (for repeat)
+
+            if(tempString == "repeat")
+            {
+                Repeat(input);
+            }
+
             tempString = input.Split(' ')[1]; // retrieves second word (to check operands)
 
             string[] operations = 
@@ -216,6 +224,26 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             }
             Console.WriteLine(segments[0]);
             Console.WriteLine(segments[1]);
+        }
+
+        public static void Repeat(string input)
+        {
+            segments = input.Split(' ');
+            Interpreter.tempString = segments[2];
+            tempString.Trim(':');
+            Init.i = Convert.ToInt32(tempString);
+            input = "";
+            for(int j = 2; j == segments.Length; j++)
+            {
+                input += segments[j];
+                input += " ";
+            }
+            Console.WriteLine(input);
+            Console.ReadKey();
+            /*for(int k = 0; k == Init.i; k++)
+            {
+                Interpreter.Interpret(input);
+            }*/
         }
     }
 
