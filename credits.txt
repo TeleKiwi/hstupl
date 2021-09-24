@@ -1,0 +1,4 @@
+The line reading code was sourced from docs.microsoft.com (although i modified it quite a bit).
+The "get string between 2 characters" code was sourced from a legend on Stack Overflow.
+All other code is completely original.
+Thanks to Truttle1 for inspiring me to do this! (congrats on 10k subs btw)
