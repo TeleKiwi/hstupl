@@ -20,6 +20,7 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static string opening = "'";
         public static string ending = "'";
         public static int i;
+        public static int placeholderInt;
     }
 
     class Interpreter
@@ -28,15 +29,26 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static string[] segments;
         public static void Interpret(string input)
         {   
-            tempString = input.Split(' ')[0]; // checking first word (for repeat)
+            tempString = input.Split(' ')[0]; // checking first word (for repeat/++ or --)
 
             if(tempString == "repeat")
             {
                 Repeat(input);
             }
 
-            tempString = input.Split(' ')[1]; // retrieves second word (to check operands)
+            if(tempString  == "test--" || tempString == "test++")
+            {
+                ApplyToVariable(input);
+            }
 
+            try
+            {
+                tempString = input.Split(' ')[1]; // retrieves second word (to check operands)
+            }
+            catch(IndexOutOfRangeException)
+            {
+                Errors.UnknownKeywordError(input.Split(' ')[0]); 
+            }
             string[] operations = 
             {
                 "+",
@@ -54,15 +66,6 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             if (operations.Contains(tempString))
             {
                 Calculate(input);
-            }
-            string[] variableOperations =
-            {
-                "++",
-                "--",
-            };
-            if (variableOperations.Contains(tempString))
-            {
-                ApplyToVariable(input);
             }
 
             tempString = input.Split(' ')[0]; // retrieves first word
@@ -216,19 +219,45 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         {
             if(input.Contains("++"))
             {
+                // convert to int, increase int by 1, then store the int into array
                 segments = input.Split('+');
+                Init.i = Init.variables.IndexOf(segments[0]);
+                tempString = Init.variableValues[Init.i];
+                try
+                {
+                    Init.placeholderInt = Convert.ToInt32(tempString); 
+                }
+                catch(FormatException)
+                {
+                    Errors.UnassignedVarError(segments[0]);
+                }
+                Init.placeholderInt++;
+                tempString = Convert.ToString(Init.placeholderInt);
+                Init.variableValues[Init.i] = tempString;
             }
             else
             {
                 segments = input.Split('-');
+                Init.i = Init.variables.IndexOf(segments[0]);
+                tempString = Init.variableValues[Init.i];
+                try
+                {
+                    Init.placeholderInt = Convert.ToInt32(tempString); 
+                }
+                catch(FormatException)
+                {
+                    Errors.UnassignedVarError(segments[0]);
+                }
+                Init.placeholderInt--;
+                tempString = Convert.ToString(Init.placeholderInt);
+                Init.variableValues[Init.i] = tempString;
             }
-            Console.WriteLine(segments[0]);
-            Console.WriteLine(segments[1]);
+            Run.Main();
         }
 
         public static void Repeat(string input)
         {
-            Console.WriteLine("Unfinished")
+            Console.WriteLine("Unfinished");
             Run.Main();
             /*segments = input.Split(' ');
             Interpreter.tempString = segments[1];
@@ -277,6 +306,11 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static void DivisionByZeroError(string input)
         {
             Console.WriteLine("Cannot divide by 0. Please try again.");
+            Run.Main();
+        }
+        public static void UnassignedVarError(string varName)
+        {
+            Console.WriteLine("The variable named " + varName + " has been initalized, but no value has been assigned to it.");
             Run.Main();
         }
     }
