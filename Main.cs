@@ -28,7 +28,7 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static string[] segments;
         public static void Interpret(string input)
         {   
-            tempString = input.Split(' ')[1]; // checking first word (for repeat)
+            tempString = input.Split(' ')[0]; // checking first word (for repeat)
 
             if(tempString == "repeat")
             {
@@ -228,10 +228,19 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
 
         public static void Repeat(string input)
         {
-            segments = input.Split(' ');
-            Interpreter.tempString = segments[2];
+            Console.WriteLine("Unfinished")
+            Run.Main();
+            /*segments = input.Split(' ');
+            Interpreter.tempString = segments[1];
             tempString.Trim(':');
-            Init.i = Convert.ToInt32(tempString);
+            try
+            {
+                Init.i = Convert.ToInt32(tempString);
+            }
+            catch(Exception)
+            {
+                Console.WriteLine
+            }
             input = "";
             for(int j = 2; j == segments.Length; j++)
             {
@@ -240,7 +249,7 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             }
             Console.WriteLine(input);
             Console.ReadKey();
-            /*for(int k = 0; k == Init.i; k++)
+            for(int k = 0; k == Init.i; k++)
             {
                 Interpreter.Interpret(input);
             }*/
