@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace HSTUPL__hopefully_simple_to_understand_programming_language_
 {   
@@ -13,7 +14,7 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             "assign",
             "to",
             "print",
-            "repeat"
+            "repeat",
         };
         public static List<string> variables = new List<string>();
         public static List<string> variableValues = new List<string>();
@@ -30,13 +31,13 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
         public static void Interpret(string input)
         {   
             tempString = input.Split(' ')[0]; // checking first word (for repeat/++ or --)
-
-            if(tempString == "repeat")
+    
+            if(tempString.Contains("repeat"))
             {
                 Repeat(input);
             }
 
-            if(tempString  == "test--" || tempString == "test++")
+            if(tempString.Contains("++") || tempString.Contains("--"))
             {
                 ApplyToVariable(input);
             }
@@ -74,25 +75,32 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             {
                 case "declare":
                 {   
-                    tempString = input.Split(' ').Last();
-                    Init.variables.Add(tempString);
-                    Init.variableValues.Add(" ");
-                    Run.Main();
+                    if(Init.keywords.Contains(input.Split(' ')[1]))
+                    {
+                        Errors.VarCannotShareNameWithKeyword(input.Split(' ')[1]);
+                    }
+                    else
+                    {
+                        tempString = input.Split(' ').Last();
+                        Init.variables.Add(tempString);
+                        Init.variableValues.Add(" ");
+                        Run.Main();
+                    }
                     break;
                 }
                 case "assign":
                 {
                     string[] substrings = input.Split(' ');
-                    tempString = Convert.ToString(substrings[2]); // I THOUGHT I FIXED THE INDEXING BUG WHY WAS THIS 3??? oh well i fixed it anyways
+                    tempString = Convert.ToString(substrings[3]); 
                     if(Init.variables.Contains(tempString)) 
                     {   
-                        Init.i = Init.variables.IndexOf(Convert.ToString(substrings[0]));
+                        Init.i = Init.variables.IndexOf(Convert.ToString(substrings[3]));
                         Init.variableValues.RemoveAt(Init.i);
-                        Init.variableValues.Insert(Init.i, substrings[2]);
+                        Init.variableValues.Insert(Init.i, substrings[1]);
                     }
                     else
                     {
-                        Errors.VariableNotDeclaredError(substrings[0]);
+                        Errors.VariableNotDeclaredError(substrings[3]);
                     }
                     Run.Main();
                     break;
@@ -257,18 +265,22 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
 
         public static void Repeat(string input)
         {
-            Console.WriteLine("Unfinished");
-            Run.Main();
-            /*segments = input.Split(' ');
+            segments = input.Split(' ');
             Interpreter.tempString = segments[1];
-            tempString.Trim(':');
+            /*tempString.Trim(new char[] {':'} );
+            Console.WriteLine(tempString);
+            Console.WriteLine(segments[1]);
+            string pattern = "[:]";
+            Regex.Replace(tempString, pattern, string.Empty);
+            Console.WriteLine(tempString);
             try
             {
                 Init.i = Convert.ToInt32(tempString);
             }
-            catch(Exception)
+            catch(FormatException)
             {
-                Console.WriteLine
+                Console.WriteLine("Exception encountered. programmer bad");
+                Run.Main();
             }
             input = "";
             for(int j = 2; j == segments.Length; j++)
@@ -282,6 +294,8 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             {
                 Interpreter.Interpret(input);
             }*/
+            Console.WriteLine("trying to figure this out makes my brain hurt so it doesnt exist for now. avert your eyes.");
+            Run.Main();
         }
     }
 
@@ -313,6 +327,11 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             Console.WriteLine("The variable named " + varName + " has been initalized, but no value has been assigned to it.");
             Run.Main();
         }
+        public static void VarCannotShareNameWithKeyword(string varName)
+        {
+            Console.WriteLine("You cannot name this variable " + varName + ", as it shares a name with a keyword.");
+            Run.Main();
+        }
     }
     class Run
     {
@@ -341,7 +360,6 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
                 return input.Substring(posFrom + 1, posTo - posFrom - 1);
             }
         }
-
         return string.Empty;
         }
     }
