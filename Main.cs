@@ -15,6 +15,7 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
             "to",
             "print",
             "repeat",
+            "run"
         };
         public static List<string> variables = new List<string>();
         public static List<string> variableValues = new List<string>();
@@ -126,6 +127,12 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
                         }
                     }
                     Run.Main();
+                    break;
+                }
+                case "run":
+                {
+                    string[] inputSegmented = input.Split(' ');
+                    ExecuteFile(inputSegmented[1]);
                     break;
                 }
                 default:
@@ -295,6 +302,19 @@ namespace HSTUPL__hopefully_simple_to_understand_programming_language_
                 Interpreter.Interpret(input);
             }*/
             Console.WriteLine("trying to figure this out makes my brain hurt so it doesnt exist for now. avert your eyes.");
+            Run.Main();
+        }
+
+        public static void ExecuteFile(string filename)
+        {
+            List<string> lines = new List<string>();
+            lines = File.ReadAllLines(filename).ToList();
+
+            foreach(string line in lines)
+            {
+                Console.WriteLine(line);
+            }
+            
             Run.Main();
         }
     }

@@ -1,0 +1,8 @@
+declare test
+assign 0 to test
+print test
+test++
+print test
+test--
+print test
+print 'Success!'
